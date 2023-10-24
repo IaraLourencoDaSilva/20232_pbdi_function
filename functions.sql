@@ -35,7 +35,6 @@ DECLARE
     cod_conta INT := 1;   
     saldo NUMERIC(10,2);
 BEGIN
-    -- Chama a função fn_consultar_saldo
     saldo := fn_consultar_saldo(cod_cliente, cod_conta);
 
     IF saldo IS NOT NULL THEN
@@ -84,9 +83,9 @@ BEGIN
             saldo = saldo + p_valor_transferencia
         WHERE cod_cliente = p_cod_cliente_destinatario AND cod_conta = p_cod_conta_destinatario;
 
-        RETURN TRUE; -- Transferência bem-sucedida
+        RETURN TRUE; 
     ELSE
-        RETURN FALSE; -- Saldo insuficiente ou valor inválido
+        RETURN FALSE; 
     END IF;
 END;
 $$
