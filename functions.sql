@@ -3,11 +3,11 @@
 -- Tranferir
 DO $$
 DECLARE
-    cod_cliente_remetente INT := 1;        -- Substitua pelos códigos de cliente e conta desejados
+    cod_cliente_remetente INT := 1;        
     cod_conta_remetente INT := 1;
     cod_cliente_destinatario INT := 2;
     cod_conta_destinatario INT := 2;
-    valor_transferencia NUMERIC(10,2) := 100.00; -- Substitua pelo valor desejado
+    valor_transferencia NUMERIC(10,2) := 100.00; 
     transferencia_bem_sucedida BOOLEAN;
 BEGIN
     -- Chama a função fn_transferir
@@ -31,8 +31,8 @@ $$;
 -- Saldo
 DO $$
 DECLARE
-    cod_cliente INT := 1; -- Substitua pelo código de cliente desejado
-    cod_conta INT := 1;   -- Substitua pelo código de conta desejado
+    cod_cliente INT := 1; 
+    cod_conta INT := 1;   
     saldo NUMERIC(10,2);
 BEGIN
     -- Chama a função fn_consultar_saldo
