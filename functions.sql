@@ -1,4 +1,51 @@
 --Exercicios
+-- 1.3 Escreva blocos anônimos para testar cada função.
+-- Tranferir
+DO $$
+DECLARE
+    cod_cliente_remetente INT := 1;        -- Substitua pelos códigos de cliente e conta desejados
+    cod_conta_remetente INT := 1;
+    cod_cliente_destinatario INT := 2;
+    cod_conta_destinatario INT := 2;
+    valor_transferencia NUMERIC(10,2) := 100.00; -- Substitua pelo valor desejado
+    transferencia_bem_sucedida BOOLEAN;
+BEGIN
+    -- Chama a função fn_transferir
+    transferencia_bem_sucedida := fn_transferir(
+        cod_cliente_remetente,
+        cod_conta_remetente,
+        cod_cliente_destinatario,
+        cod_conta_destinatario,
+        valor_transferencia
+    );
+
+    IF transferencia_bem_sucedida THEN
+        RAISE NOTICE 'Transferência bem-sucedida';
+    ELSE
+        RAISE NOTICE 'Falha na transferência';
+    END IF;
+END;
+$$;
+
+
+-- Saldo
+DO $$
+DECLARE
+    cod_cliente INT := 1; -- Substitua pelo código de cliente desejado
+    cod_conta INT := 1;   -- Substitua pelo código de conta desejado
+    saldo NUMERIC(10,2);
+BEGIN
+    -- Chama a função fn_consultar_saldo
+    saldo := fn_consultar_saldo(cod_cliente, cod_conta);
+
+    IF saldo IS NOT NULL THEN
+        RAISE NOTICE 'Saldo da conta %:% = %', cod_cliente, cod_conta, saldo;
+    ELSE
+        RAISE NOTICE 'Conta não encontrada';
+    END IF;
+END;
+$$;
+
 -- 1.2 Escreva a seguinte função
 -- nome: fn_transferir
 -- recebe: código de cliente remetente, código de conta remetente, código de cliente
