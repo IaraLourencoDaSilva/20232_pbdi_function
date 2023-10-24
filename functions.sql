@@ -1,24 +1,73 @@
 --Exercicios
+-- 1.2 Escreva a seguinte função
+-- nome: fn_transferir
+-- recebe: código de cliente remetente, código de conta remetente, código de cliente
+-- destinatário, código de conta destinatário, valor da transferência
+-- devolve: um booleano que indica se a transferência ocorreu ou não. Uma transferência
+-- somente pode acontecer se nenhuma conta envolvida ficar no negativo.
+CREATE OR REPLACE FUNCTION fn_transferir(
+    IN p_cod_cliente_remetente INT,
+    IN p_cod_conta_remetente INT,
+    IN p_cod_cliente_destinatario INT,
+    IN p_cod_conta_destinatario INT,
+    IN p_valor_transferencia NUMERIC(10,2)
+) RETURNS BOOLEAN LANGUAGE plpgsql AS $$
+DECLARE 
+    v_saldo_remetente NUMERIC(10,2);
+    v_saldo_destinatario NUMERIC(10,2);
+BEGIN
+    -- Obtém o saldo do remetente
+    SELECT saldo INTO v_saldo_remetente
+    FROM tb_conta c
+    WHERE c.cod_cliente = p_cod_cliente_remetente AND c.cod_conta = p_cod_conta_remetente;
+    
+    -- Obtém o saldo do destinatário
+    SELECT saldo INTO v_saldo_destinatario
+    FROM tb_conta c
+    WHERE c.cod_cliente = p_cod_cliente_destinatario AND c.cod_conta = p_cod_conta_destinatario;
+    
+    -- Verifica se o saldo do remetente é suficiente
+    IF v_saldo_remetente >= p_valor_transferencia AND p_valor_transferencia > 0 THEN
+        -- Atualiza o saldo do remetente e do destinatário
+        UPDATE tb_conta SET
+            saldo = saldo - p_valor_transferencia
+        WHERE cod_cliente = p_cod_cliente_remetente AND cod_conta = p_cod_conta_remetente;
+
+        UPDATE tb_conta SET
+            saldo = saldo + p_valor_transferencia
+        WHERE cod_cliente = p_cod_cliente_destinatario AND cod_conta = p_cod_conta_destinatario;
+
+        RETURN TRUE; -- Transferência bem-sucedida
+    ELSE
+        RETURN FALSE; -- Saldo insuficiente ou valor inválido
+    END IF;
+END;
+$$
+
+
+
+
+
 -- 1.1 Escreva a seguinte função
 -- nome: fn_consultar_saldo
 -- recebe: código de cliente, código de conta
 -- devolve: o saldo da conta especificada
 
-CREATE OR REPLACE FUNCTION fn_consultar_saldo(
-	IN cod_cliente INT,
-	IN cod_cod_conta INT
-) RETURNS NUMERIC(10,2) LANGUAGE plpgsql AS $$
-DECLARE 
-	v_saldo NUMERIC(10,2);
-BEGIN
-	 SELECT saldo INTO v_saldo
-    FROM tb_conta c
-    WHERE c.cod_cliente = p_cod_cliente AND c.cod_conta = p_cod_conta;
-    RETURN v_saldo;
-EXCEPTION WHEN NO_DATA_FOUND THEN
-    RETURN NULL;
-END;
-$$
+-- CREATE OR REPLACE FUNCTION fn_consultar_saldo(
+-- 	IN cod_cliente INT,
+-- 	IN cod_cod_conta INT
+-- ) RETURNS NUMERIC(10,2) LANGUAGE plpgsql AS $$
+-- DECLARE 
+-- 	v_saldo NUMERIC(10,2);
+-- BEGIN
+-- 	 SELECT saldo INTO v_saldo
+--     FROM tb_conta c
+--     WHERE c.cod_cliente = p_cod_cliente AND c.cod_conta = p_cod_conta;
+--     RETURN v_saldo;
+-- EXCEPTION WHEN NO_DATA_FOUND THEN
+--     RETURN NULL;
+-- END;
+-- $$
 
 
 -- DO $$
